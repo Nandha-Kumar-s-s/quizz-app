@@ -1,9 +1,15 @@
 import { useState } from "react";
 import './result.scss'
+// create a Result component
+// passing the array parameter from the parent component
 const Result =  (props) =>{
+  // using the useState hooks for managing the state
     const [currentQuestion , setCurrentQuestion] = useState(0)
+
+  // once the finish state is to true it move to the greeting page
     const [finish, setFinish] = useState(false)
 
+  // once the finish button is clicked it remove the all button from the component
     const [buttonVisible, setButtonVisible] = useState(true);
 
     const handleButtonClick = () => {
@@ -11,6 +17,7 @@ const Result =  (props) =>{
       console.log("hi");
     };
 
+  // object destructuring from the props
     const {userAnswer} = props;
 
  /*   const userAnswer = [
@@ -46,28 +53,40 @@ const Result =  (props) =>{
           },
     ]
 */
+
+    // this handlePrevAns() is used to handle the preview answer intially the currentQuestion value is zero
     const handlePrevAns = () =>{
         setCurrentQuestion(currentQuestion -1);
     }
+
+    // this handleNextAns() is used to handle the preview answer intially the currentQuestion value is zero
     const handleNextAns = () =>{
         setCurrentQuestion(currentQuestion + 1);
     }
-
+    // handleFinish() is used to finish the entire quizz app
     const handleFinish = () =>{
         setFinish(true);
     }
 
+   // create a renderResult function to display the question obj 
     const renderResult = () =>{
+      // assign the currentQuestion value to the question
         const question = userAnswer[currentQuestion];
+      
         const selected = userAnswer[currentQuestion];
+
+      // assign the user selected value in the Answer for the currentQuestion 
         const Answer = selected?.isSelected;
+        
+      // assign the isCorrectAnswer to the Answer value only the answer keyword is relevant to that
         const isCorrectAnswer = Answer === question?.answer;
     
         return(
             <>
+        {/* Render the result data */}
         {!finish ? (
-          <div className="main">
-            <div className="container">
+          <div className="res-main">
+            <div className="res-container">
             <h3 className="head">Quiz Result</h3>
             <div>
               <h4>{question?.id}. {question?.question}</h4>
@@ -95,7 +114,7 @@ const Result =  (props) =>{
         )
     }
 
-    
+   // calling the renderResult() in the main parent result component 
     return (
         <>
         <div>

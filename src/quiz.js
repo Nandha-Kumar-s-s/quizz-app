@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import Result from './result';
+import './quiz.scss';
+import {AiOutlineFieldTime} from 'react-icons/ai'
+
 
 const Quiz1 = () => {
   const questionsData = [
@@ -29,7 +32,7 @@ const Quiz1 = () => {
   const [userData, setUserData] = useState(questionsData.map((question) => ({ ...question, isSelected: 'not selected' })));
   const [showResults, setShowResults] = useState(false);
   const [quizScore, setQuizScore] = useState(0);
-  const [timeRemaining, setTimeRemaining] = useState(100); // 5 minutes in seconds
+  const [timeRemaining, setTimeRemaining] = useState(300); // 5 minutes in seconds
   const [viewRes, setViewRes] = useState(false);
 
   const viewResult = () =>{
@@ -83,6 +86,11 @@ const Quiz1 = () => {
     };
   }, [timeRemaining]);
 
+  let divisor_for_minutes = timeRemaining % (60 * 60);
+  let minutes = Math.floor(divisor_for_minutes / 60);
+  let divisor_for_seconds = divisor_for_minutes % 60;
+  let seconds = Math.ceil(divisor_for_seconds);
+
   return (
 
     <>
@@ -91,8 +99,12 @@ const Quiz1 = () => {
       
       {!showResults ? (
         <form onSubmit={handleSubmit}>
-          <h1>RPA QUIZZ COMPETITION</h1>
-          <p>{questionsData[currentQuestion].id}.{questions[currentQuestion].question}</p>
+          <div className='ques-main'>
+            <div className='ques-container'>
+            <h1 className='head'>RPA QUIZZ COMPETITION</h1>
+            
+            <h4 className='time'><AiOutlineFieldTime/>  {minutes} : {seconds} sec</h4>
+          <h4>{questionsData[currentQuestion].id}.{questions[currentQuestion].question}</h4>
           {questions[currentQuestion].options.map((option, index) => (
             <div key={index}>
               <input
@@ -106,17 +118,35 @@ const Quiz1 = () => {
               <label htmlFor={`q${currentQuestion}-${index}`}>{option}</label>
             </div>
           ))}
+            </div>
+          </div>
+          
           <br />
-          {currentQuestion > 0 && <button type="button" onClick={prevQuestion}>Previous</button>}
-          {currentQuestion < questions.length - 1 && <button type="button" onClick={nextQuestion}>Next</button>}
-          {currentQuestion === questions.length - 1 && <button type="submit">Submit</button>}
-          <p>Time Remaining: {timeRemaining} seconds</p>
+          <div className="btn-container">
+            <div className='btn'>
+
+          {currentQuestion > 0 && <div type="button" onClick={prevQuestion} className='prev'>Previous</div>}
+          {currentQuestion < questions.length - 1 && <div type="button" onClick={nextQuestion} className='next'>Next</div>}
+          {currentQuestion === questions.length - 1 && <div type="submit" className='submit' onClick={handleSubmit}>Submit</div>}
+            </div>
+          </div>
+          
+          
         </form>
       ) : (
-        <div>
+        <div className='score-main'>
+          <div className='score-container'>
+
           <h1>Congratuluations you completed your test</h1>
-          <p>You Scored: {quizScore} Out of {questions.length} questions</p>
-          <div onClick={viewResult}>SHOW RESLUT</div>
+          <h3 className='score'>You Scored: {quizScore} Out of {questions.length} questions</h3>
+          <div className='btn-container'>
+            <div className='btn'>
+              <div onClick={viewResult} className='show'>SHOW RESLUT</div>
+
+            </div>
+
+          </div>
+          </div>
         </div>
 
       )
